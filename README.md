@@ -368,11 +368,11 @@ And more.. You need to look sxhkdrc file for more, or press Alt + F1 for a cheat
 
 ```sh
 # Download the installer in your ~/Download
-curl -LO https://github.com/Evil-Noctulo/gh0stzk-bspwm-ubuntu.git
+git clone https://github.com/Evil-Noctulo/gh0stzk-bspwm-ubuntu.git
 
 # Give it execution permission
 chmod +x RiceInstaller-ubuntu
 
-# Run the installer in home directory
+# Run the installer in $HOME directory
 ./RiceInstaller
 ```
