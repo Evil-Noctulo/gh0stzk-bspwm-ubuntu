@@ -369,20 +369,13 @@ And more.. You need to look sxhkdrc file for more, or press Alt + F1 for a cheat
 
 ### 💾 Installation:
 
-> [!NOTE]
-> The installer only works for **ARCH** Linux, and based distros. (Except NO-Systemd ditros like Artix)
-
-Before running this command, check [RiceInstaller](https://raw.githubusercontent.com/gh0stzk/dotfiles/master/RiceInstaller) to make sure it's working and confirm it's safe for your system.
-
-- Open a terminal and execute this commands one by one:
-
 ```sh
-# Download the installer in your $HOME
-curl -LO http://gh0stzk.github.io/dotfiles/RiceInstaller
+# Download the installer in your ~/Download
+curl -LO https://github.com/Evil-Noctulo/gh0stzk-bspwm-ubuntu.git
 
 # Give it execution permission
-chmod +x RiceInstaller
+chmod +x RiceInstaller-ubuntu
 
-# Run the installer
+# Run the installer in home directory
 ./RiceInstaller
 ```
