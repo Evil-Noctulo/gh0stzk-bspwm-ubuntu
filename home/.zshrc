@@ -160,3 +160,11 @@ alias ll='eza --icons=always --color=always -la'
 #  ┴ ┴└─┘ ┴ └─┘  └─┘ ┴ ┴ ┴┴└─ ┴
 $HOME/.local/bin/colorscript -r
 #disable-fzf-tab
+
+# Tab doble lista el contenido del directorio actual
+setopt AUTO_LIST
+setopt COMPLETE_IN_WORD
+setopt ALWAYS_TO_END
+bindkey '\t' expand-or-complete
+setopt GLOB_COMPLETE
+zstyle ':completion:*' menu yes select
