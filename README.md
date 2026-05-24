@@ -375,4 +375,12 @@ chmod +x RiceInstaller-ubuntu
 
 # Run the installer in $HOME directory
 ./RiceInstaller
+
+# Login
+Select BSPWN
+
+# Fix possible troubles with the shortcuts
+super + alt + r (Restart bspwn)
+super + esq (reload sxhkd)
+
 ```
