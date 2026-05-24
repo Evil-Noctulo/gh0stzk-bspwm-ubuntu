@@ -19,10 +19,7 @@ https://github.com/user-attachments/assets/3eaae1e2-04dc-4a9b-8c91-139f85f5fb9e
 
 ## 👻 Welcome
 
-Welcome to my dotfiles. I’m gh0stzk from Mexico.
-
 These dotfiles are designed with the goal of providing a bspwm environment that is lightweight, efficient, and functional, tailored for any use—whether it’s gaming, web browsing, or a productive work setting.
-
 You’ll have 18 unique themes to choose from, each with its own style, colors, and navigation bar options. With this variety, you’re sure to find one that suits your preferences and needs.
 
 ## :book: Wiki
