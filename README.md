@@ -269,7 +269,7 @@ Optimized, native ZSH configuration. Not __Oh-My-Zsh__ or other bloated plugin m
 
 | ![fzf tab](https://github.com/user-attachments/assets/2771e549-f7cc-44da-baf2-6c9fa299f0fb) |
 | :---: |
-| cd, ls, pacman, systemctl, kill, cat, commands with preview! |
+| cd, ls, apt, systemctl, kill, cat, commands with preview! |
 
 ### Eww widgets
 
@@ -347,7 +347,7 @@ And more.. You need to look sxhkdrc file for more, or press Alt + F1 for a cheat
 > Some elements may appear different on higher or lower resolutions. You may need to make adjustments to adapt them to your preferences and setup. ⚠️⚠️⚠️
 
 > [!important]
-> ✏️✏️✏️ The installer assumes you already have a **functional** Arch Linux installation, whether it’s a fresh install or an existing setup.
+> ✏️✏️✏️ The installer assumes you already have a **functional** Ubuntu (or Debian-based) installation, whether it’s a fresh install or an existing setup.
 >
 > A login manager of your choice is required; **lightdm** is recommended.
 >

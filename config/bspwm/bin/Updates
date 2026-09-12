@@ -1,40 +1,57 @@
 #!/bin/sh
 # =============================================================
-# Author: gh0stzk
-# Repo:   https://github.com/gh0stzk/dotfiles
+# Author: gh0stzk (adapted by Evil-Noctulo for Ubuntu/Debian)
+# Repo:   https://github.com/Evil-Noctulo/gh0stzk-bspwm-ubuntu
 # Date:   06.04.2025 09:41:28
 #
-# ArchUpdates - Script to check for new updates in ARCH and AUR
-#               and sync updates module in polybar/Eww.
+# Updates - Script to check for new updates via apt and snap,
+#           and sync updates module in polybar/Eww.
 # Features:
 #   ✔ Shows the number of updates available in polybar/eww
-#   ✔ Used in a pacman hook to update the polybar-module/eww-poll. --sync-polybar
+#   ✔ Runs on a timer (AptUpdates.timer) to keep the polybar-module/eww-poll fresh
 #
 # Dependencies:
-#   → pacman-contrib, paru, polybar
+#   → update-notifier-common (apt-check), apt, polybar
+#   → snapd (optional, for the Snap updates count)
 #
 # Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
 # Licensed under GPL-3.0 license
 # =============================================================
 
 UPDATE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/Updates.txt"
+APT_CHECK="/usr/lib/update-notifier/apt-check"
 
 # Main verification function
 check_updates() {
-    # Get official updates
+    # Get official (apt) updates. apt-check reads the existing apt cache
+    # without needing root, and is kept fresh by apt-daily.timer; fall back
+    # to "apt list --upgradable" if update-notifier-common isn't installed.
     official=0
-    if updates=$(checkupdates 2>/dev/null); then
-        official=$(echo "$updates" | wc -l)
+    updates=""
+    if [ -x "$APT_CHECK" ]; then
+        official=$("$APT_CHECK" 2>&1 | cut -d';' -f1)
+        case "$official" in *[!0-9]*|"") official=0 ;; esac
+        if [ "$official" -gt 0 ]; then
+            updates=$(apt list --upgradable 2>/dev/null | tail -n +2 | cut -d'/' -f1)
+        fi
+    elif command -v apt >/dev/null 2>&1; then
+        if updates=$(apt list --upgradable 2>/dev/null | tail -n +2); then
+            official=$(printf "%s\n" "$updates" | sed '/^$/d' | wc -l)
+            updates=$(printf "%s\n" "$updates" | cut -d'/' -f1)
+        fi
     fi
 
-    # Get AUR updates
-    aur=0
-    if aur_updates=$(paru -Qua 2>/dev/null); then
-        aur=$(echo "$aur_updates" | wc -l)
+    # Get Snap updates (Ubuntu's closest analogue to AUR packages)
+    snap=0
+    snap_updates=""
+    if command -v snap >/dev/null 2>&1; then
+        if snap_updates=$(snap refresh --list 2>/dev/null | tail -n +2); then
+            snap=$(printf "%s\n" "$snap_updates" | sed '/^$/d' | wc -l)
+        fi
     fi
 
     # Calculate and write the total to the file
-    total=$((official + aur))
+    total=$((official + snap))
     echo "$total" > "$UPDATE_FILE"
 
     # Sends the signal to polybar-module/eww-poll to update the data.
@@ -52,13 +69,13 @@ list_updates() {
         printf "\033[1m\033[33mThere are %s updates available:\033[0m\n" "$total"
 
         if [ -n "$updates" ]; then
-            printf "\n\033[1m\033[34mOfficial updates:\033[0m\n"
-            printf "%s\n" "$updates" | sed 's/->/\x1b[32;1m\x1b[0m/g'
+            printf "\n\033[1m\033[34mAPT updates:\033[0m\n"
+            printf "%s\n" "$updates"
         fi
 
-        if [ -n "$aur_updates" ]; then
-            printf "\n\033[1m\033[34mAUR updates:\033[0m\n"
-            printf "%s\n" "$aur_updates" | sed 's/->/\x1b[32;1m\x1b[0m/g'
+        if [ -n "$snap_updates" ]; then
+            printf "\n\033[1m\033[34mSnap updates:\033[0m\n"
+            printf "%s\n" "$snap_updates"
         fi
     else
         printf "\033[1m\033[32m¡Your system is already updated!\033[0m\n"

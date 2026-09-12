@@ -10,9 +10,9 @@
 (defpoll hostname :interval "24h" "cat /etc/hostname")
 (defpoll uptime :interval "30s" "uptime -p | sed -E -e 's/hour(s)?/hrs/g' -e 's/minute(s)?/min/g'")
 
-;; Pacman
+;; Packages
 (defpoll UPDATES :interval "15m" `cat $HOME/.cache/Updates.txt 2>/dev/null`)
-(defpoll packages :interval "1h" "pacman -Q | wc -l")
+(defpoll packages :interval "1h" "dpkg -l | grep -c ^ii")
 
 ;; Weather
 (defpoll weathericon :interval "15m" "Weather icon")
