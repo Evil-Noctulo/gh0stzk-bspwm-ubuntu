@@ -209,7 +209,7 @@ install_apt_dependencies() {
     #   ttf-jetbrains-mono    -> fonts-jetbrains-mono
     #   webp-pixbuf-loader    -> webp-pixbuf-loader  (same name)
     #   gvfs-mtp              -> gvfs-backends  (includes MTP)
-    #   pacman-contrib        -> N/A (Arch-only, omitted)
+    #   pacman-contrib        -> update-notifier-common (provides apt-check, used by the Updates widget)
     #   eza, clipcat, yazi, xcolor, xdo, xwinwrap, i3lock-color, fzf-tab, eww, rustup
     #     -> handled in dedicated functions below
     #   ttf-*-nerd            -> downloaded from nerd-fonts releases
@@ -222,6 +222,7 @@ install_apt_dependencies() {
 dunst feh fzf geany git gvfs-backends imagemagick jq jgmenu kitty lxsession \
 maim mpc mpd mpv ncmpcpp neovim nodejs npm pamixer papirus-icon-theme picom \
 playerctl polybar python3-gi redshift rofi jmtpfs sxhkd thunar tumbler \
+update-notifier-common \
 pass webp-pixbuf-loader wget unzip zstd xclip xdg-user-dirs x11-apps xdotool \
 x11-utils x11-xserver-utils xsettingsd zsh zsh-autosuggestions \
 zsh-syntax-highlighting \
@@ -1173,17 +1174,14 @@ install_dotfiles() {
         fi
     done
 
-    # systemd: copy user units but strip Arch-specific ArchUpdates files
+    # systemd: copy all user units (AptUpdates.service/.timer check updates via apt/snap)
     systemd_src="$HOME/.local/share/gh0stzk/config/systemd"
     if [ -d "$systemd_src" ]; then
         mkdir -p "$HOME/.config/systemd/user"
-        find "$systemd_src" -type f \
-            ! -name "ArchUpdates.service" \
-            ! -name "ArchUpdates.timer" | while read -r unit; do
+        find "$systemd_src" -type f | while read -r unit; do
             cp "$unit" "$HOME/.config/systemd/user/"
             log "Unidad systemd copiada: $(basename "$unit")"
         done
-        log "Omitidos ArchUpdates.service y ArchUpdates.timer (específicos de Arch)"
     else
         log "AVISO: directorio systemd no encontrado: $systemd_src"
     fi
@@ -1264,7 +1262,13 @@ configure_services() {
         printf "%b\n" "${BLD}${CYE}Servicio MPD de usuario no disponible aún, puede requerir habilitación manual tras reinicio.${CNC}"
     fi
 
-    # Note: ArchUpdates.timer is Arch-specific; omitted on Ubuntu.
+    printf "%b\n" "${BLD}${CYE}Habilitando comprobación periódica de actualizaciones (apt/snap)...${CNC}"
+    log "Habilitando AptUpdates.timer de usuario"
+    run systemctl --user daemon-reload
+    if ! systemctl --user enable --now AptUpdates.timer 2>> "$LOG_FILE"; then
+        log "AVISO: fallo al habilitar AptUpdates.timer — puede requerir habilitación manual tras reinicio"
+        printf "%b\n" "${BLD}${CYE}AptUpdates.timer no disponible aún, puede requerir habilitación manual tras reinicio.${CNC}"
+    fi
 
     is_virtual_machine() {
         systemd-detect-virt --quiet >/dev/null 2>&1
