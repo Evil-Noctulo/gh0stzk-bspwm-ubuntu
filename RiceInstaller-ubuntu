@@ -480,7 +480,8 @@ install_eww() {
 #   xdo           — build from source (baskerville/xdo)
 #   i3lock-color  — build from source (Raymo111/i3lock-color)
 #   xwinwrap      — build from source (ujjwal96/xwinwrap)
-#   simple-mtpfs  — apt (already handled above)
+#   simple-mtpfs  — apt as jmtpfs instead (already handled above; AndroidMount
+#                   uses jmtpfs's CLI, not simple-mtpfs's)
 #   fzf-tab-git   — handled in install_fzf_tab()
 install_source_builds() {
     clear
