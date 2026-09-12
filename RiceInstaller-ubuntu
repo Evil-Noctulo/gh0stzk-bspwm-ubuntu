@@ -225,8 +225,10 @@ install_apt_dependencies() {
     #   bluez-utils         -> bluez (provides bluetoothctl + bluetooth.service, used by
     #                          rofi-bluetooth and bluetooth-polybar.sh)
     #   bc                  -> ADDED (rofi-bluetooth uses it for a bluetoothctl version check)
+    #   ffmpeg              -> ADDED (WallSync extracts a frame for animated wallpapers, and
+    #                          MediaControl grabs album art from playing tracks; both use it directly)
     dependencies="alacritty bat brightnessctl bspwm build-essential cmake curl \
-dunst feh fzf geany git gvfs-backends imagemagick jq jgmenu kitty lxsession lxpolkit \
+dunst feh ffmpeg fzf geany git gvfs-backends imagemagick jq jgmenu kitty lxsession lxpolkit \
 maim mpc mpd mpv ncmpcpp neovim nodejs npm pamixer papirus-icon-theme picom \
 playerctl polybar python3-gi redshift rofi jmtpfs sxhkd thunar tumbler \
 update-notifier-common network-manager gir1.2-nm-1.0 bluez bc \
