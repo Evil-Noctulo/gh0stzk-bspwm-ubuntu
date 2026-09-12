@@ -218,11 +218,18 @@ install_apt_dependencies() {
     #   xdpyinfo            -> x11-apps  (xdpyinfo is bundled here in noble)
     #   zsh-history-substring-search -> NOT in noble; cloned from git in install_zsh_plugins()
     #   libxcb-xrm-dev      -> ADDED (was missing, caused i3lock-color configure failure)
+    #   lxpolkit            -> ADDED (separate package from lxsession; bspwmrc runs it as the
+    #                          PolicyKit agent, needed for NetworkManager/udisks auth prompts)
+    #   gir1.2-nm-1.0       -> ADDED (NM GObject introspection typelib; NetManagerDM imports
+    #                          "gi.repository.NM" and fails without it, even with network-manager installed)
+    #   bluez-utils         -> bluez (provides bluetoothctl + bluetooth.service, used by
+    #                          rofi-bluetooth and bluetooth-polybar.sh)
+    #   bc                  -> ADDED (rofi-bluetooth uses it for a bluetoothctl version check)
     dependencies="alacritty bat brightnessctl bspwm build-essential cmake curl \
-dunst feh fzf geany git gvfs-backends imagemagick jq jgmenu kitty lxsession \
+dunst feh fzf geany git gvfs-backends imagemagick jq jgmenu kitty lxsession lxpolkit \
 maim mpc mpd mpv ncmpcpp neovim nodejs npm pamixer papirus-icon-theme picom \
 playerctl polybar python3-gi redshift rofi jmtpfs sxhkd thunar tumbler \
-update-notifier-common \
+update-notifier-common network-manager gir1.2-nm-1.0 bluez bc \
 pass webp-pixbuf-loader wget unzip zstd xclip xdg-user-dirs x11-apps xdotool \
 x11-utils x11-xserver-utils xsettingsd zsh zsh-autosuggestions \
 zsh-syntax-highlighting \
